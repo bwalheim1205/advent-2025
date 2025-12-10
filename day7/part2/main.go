@@ -15,8 +15,7 @@ func main() {
 	}
 	defer file.Close()
 
-	var beams map[int]bool = make(map[int]bool)
-	count := 0
+	var beams map[int]int = make(map[int]int)
 
 	// Create scanner to read file
 	scanner := bufio.NewScanner(file)
@@ -27,15 +26,14 @@ func main() {
 		printLine := ""
 		if len(beams) == 0 {
 			index := strings.Index(line, "S")
-			beams[index] = true
+			beams[index] = 1
 			printLine = line
 		} else {
 			for j, char := range line {
 				if _, exists := beams[j]; exists {
 					if char == '^' {
-						count++
-						beams[j-1] = true
-						beams[j+1] = true
+						beams[j-1] = beams[j-1] + beams[j]
+						beams[j+1] = beams[j+1] + beams[j]
 						delete(beams, j)
 						printLine = printLine[:len(printLine)-1] + "|^"
 					} else {
@@ -48,5 +46,10 @@ func main() {
 		}
 		fmt.Println(printLine)
 	}
-	fmt.Println("Beam Count: ", count)
+
+	count := 0
+	for _, paths := range beams {
+		count += paths
+	}
+	fmt.Println("Numbr of paths:", count)
 }
