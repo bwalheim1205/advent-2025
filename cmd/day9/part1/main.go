@@ -66,7 +66,6 @@ func main() {
 	defer file.Close()
 
 	points := parseFile(file)
-	fmt.Println(points[0].x, points[0].y)
 	area := maxArea(points)
 	fmt.Println(area)
 }
